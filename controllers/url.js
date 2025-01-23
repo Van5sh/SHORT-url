@@ -1,23 +1,31 @@
 const express = require('express');
 const shortid = require('short-id');
 const Url = require('../models/url');
+const { format } = require('date-fns');
 
 async function GenerateNewShortUrl(req, res) {
-    const body = req.body;
-    if (!body.url) {
-        return res.status(400).json({error: 'url is required'});
-    }
-    const shortID = shortid.generate();
+    try {
+        const body = req.body;
+        if (!body.url) {
+            return res.status(400).json({ error: 'URL is required' });
+        }
+        const shortID = shortid.generate();
 
-    await Url.create({
-        shortId: shortID,
-        redirectUrl: body.url,
-        visitHistory: [],
-    })
-    return res.json({id: shortID});
+        await Url.create({
+            shortId: shortID,
+            redirectUrl: body.url,
+            visitHistory: [],
+        });
+
+        return res.render('home', { id: shortID });
+    } catch (error) {
+        console.error("Error generating short URL:", error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
 }
 
-async function getURLS(req,res){
+
+async function getURL(req,res){
     const shortId=req.params.shortId;
 
     const entry=await Url.findOneAndUpdate({
@@ -30,6 +38,9 @@ async function getURLS(req,res){
             },
         }
     );
+    if(!entry){
+        return res.status(404).json({ error: 'Short URL not found' });
+    }
     res.redirect(entry.redirectUrl);
 }
 
@@ -53,7 +64,7 @@ async function getAnalytics(req, res) {
 };
 module.exports = {
     GenerateNewShortUrl,
-    getURLS,
+    getURL,
     getAnalytics,
     deleteRequest,
 }
