@@ -16,8 +16,7 @@ async function GenerateNewShortUrl(req, res) {
             redirectUrl: body.url,
             visitHistory: [],
         });
-
-        return res.render('home', { id: shortID });
+        return res.render('home', { id: shortID, urls: Url.allUrls });
     } catch (error) {
         console.error("Error generating short URL:", error);
         return res.status(500).json({ error: 'Internal server error' });
@@ -36,6 +35,7 @@ async function getURL(req,res){
                     timestamp: Number(format(Date.now(), 'yyyyMMdd')),
                 },
             },
+            $inc: { totalClicks: 1 },
         }
     );
     if(!entry){
