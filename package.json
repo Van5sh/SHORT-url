@@ -1,0 +1,26 @@
+{
+  "name": "short-url",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Van5sh/SHORT-url#readme",
+  "bugs": {
+    "url": "https://github.com/Van5sh/SHORT-url/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Van5sh/SHORT-url.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "nodemon": "^3.1.9"
+  }
+}
